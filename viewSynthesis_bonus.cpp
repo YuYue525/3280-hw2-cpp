@@ -238,7 +238,7 @@ int main(int argc, char** argv)
     }*/
   
     FILE * html_file = fopen("synthetic_views.html", "w");
-    fprintf(html_file, "<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<title>synthetic views</title>\n<script src=\"https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js\">\n</script>\n<script>\n");
+    fprintf(html_file, "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>synthetic views</title>\n<script src=\"https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js\">\n</script>\n<script>\n");
     for(int k=0; k<576; k++)
     {
         string jquery = "$(document).ready(function(){$(\"#button"+std::to_string(k)+"\").hover(function(){$(\"#"+std::to_string(k)+"\").css(\"display\",\"block\");},function(){$(\"#"+std::to_string(k)+"\").css(\"display\",\"none\");});});";
