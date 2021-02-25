@@ -96,9 +96,9 @@ int main(int argc, char** argv)
                     viewImageList[9 * (y+1) + x].getColor(c, r, red3, green3, blue3);
                     viewImageList[9 * (y+1) + (x+1)].getColor(c, r, red4, green4, blue4);
       
-                    rayRGB.x = (double)((1-b)*((1-a)*red1+a*red2)+b*((1-a)*red3+a*red4));
-                    rayRGB.y = (double)((1-b)*((1-a)*green1+a*green2)+b*((1-a)*green3+a*green4));
-                    rayRGB.z = (double)((1-b)*((1-a)*blue1+a*blue2)+b*((1-a)*blue3+a*blue4));
+                    rayRGB.x = (double)((1-b) * ((1-a) * red1 + a * red2) + b * ((1-a) * red3 + a * red4));
+                    rayRGB.y = (double)((1-b) * ((1-a) * green1 + a * green2) + b * ((1-a) * green3 + a * green4));
+                    rayRGB.z = (double)((1-b) * ((1-a) * blue1 + a * blue2) + b * ((1-a) * blue3 + a * blue4));
                 }
             }
             else
@@ -116,14 +116,14 @@ int main(int argc, char** argv)
                 
                 int ci, ri;
                 double u, v, alpha, beta;
-                u = (double)(70*c-17885)/1024.0*100.0/(double)targetFocalLen+17.5;// the position of the pixel
-                v = (double)(70*r-17885)/1024.0*100.0/(double)targetFocalLen+17.5;
+                u = (double)(70*c-17885)*100.0/1024.0/(double)targetFocalLen + 17.5;// the position of the pixel
+                v = (double)(70*r-17885)*100.0/1024.0/(double)targetFocalLen + 17.5;
 
-                ci = (int)((double)(1024*u - 35.0))/(70.0);
-                ri = (int)((double)(1024*v - 35.0))/(70.0);
+                ci = (int)((double)(1024 * u - 35.0))/(70.0);
+                ri = (int)((double)(1024 * v - 35.0))/(70.0);
                 
                 alpha = (1024 * u - (70 * ci + 35)) / (70.0);
-                beta = 1-(1024 * v - (70 * ri + 35)) / (70.0);
+                beta = 1 - (1024 * v - (70 * ri + 35)) / (70.0);
                 
                 if(X<120 && X>=-120 && Y<=120 && Y>-120 && ci>=0 && ci<511 && ri>=0 && ri<511)
                 {
@@ -148,38 +148,38 @@ int main(int argc, char** argv)
                             
                             if(i == 0 && j ==0)
                             {
-                                red1 = (double)((1-beta)*((1-alpha)*r1+alpha*r2)+beta*((1-alpha)*r3+alpha*r4));
-                                green1 = (double)((1-beta)*((1-alpha)*g1+alpha*g2)+beta*((1-alpha)*g3+alpha*g4));
-                                blue1 = (double)((1-beta)*((1-alpha)*b1+alpha*b2)+beta*((1-alpha)*b3+alpha*b4));
+                                red1 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green1 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue1 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
                             }
                             else if(i == 0 && j == 1)
                             {
-                                red2 = (double)((1-beta)*((1-alpha)*r1+alpha*r2)+beta*((1-alpha)*r3+alpha*r4));
-                                green2 = (double)((1-beta)*((1-alpha)*g1+alpha*g2)+beta*((1-alpha)*g3+alpha*g4));
-                                blue2 = (double)((1-beta)*((1-alpha)*b1+alpha*b2)+beta*((1-alpha)*b3+alpha*b4));
+                                red2 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green2 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue2 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
                             }
                             else if(i ==1 && j == 0)
                             {
-                                red3 = (double)((1-beta)*((1-alpha)*r1+alpha*r2)+beta*((1-alpha)*r3+alpha*r4));
-                                green3 = (double)((1-beta)*((1-alpha)*g1+alpha*g2)+beta*((1-alpha)*g3+alpha*g4));
-                                blue3 = (double)((1-beta)*((1-alpha)*b1+alpha*b2)+beta*((1-alpha)*b3+alpha*b4));
+                                red3 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green3 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue3 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
                             }
                             else
                             {
-                                red4 = (double)((1-beta)*((1-alpha)*r1+alpha*r2)+beta*((1-alpha)*r3+alpha*r4));
-                                green4 = (double)((1-beta)*((1-alpha)*g1+alpha*g2)+beta*((1-alpha)*g3+alpha*g4));
-                                blue4 = (double)((1-beta)*((1-alpha)*b1+alpha*b2)+beta*((1-alpha)*b3+alpha*b4));
+                                red4 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green4 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue4 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
                             }
                         }
                     }
                     
-                    rayRGB.x = (double)((1-b)*((1-a)*red1+a*red2)+b*((1-a)*red3+a*red4));
-                    rayRGB.y = (double)((1-b)*((1-a)*green1+a*green2)+b*((1-a)*green3+a*green4));
-                    rayRGB.z = (double)((1-b)*((1-a)*blue1+a*blue2)+b*((1-a)*blue3+a*blue4));
+                    rayRGB.x = (double)((1-b) * ((1-a) * red1 + a * red2) + b * ((1-a) * red3 + a * red4));
+                    rayRGB.y = (double)((1-b) * ((1-a) * green1 + a * green2) + b * ((1-a) * green3 + a * green4));
+                    rayRGB.z = (double)((1-b) * ((1-a) * blue1 + a * blue2) + b * ((1-a) * blue3 + a * blue4));
                 }
             }
             
-			//! record the resampled pixel value
+            //! record the resampled pixel value
 			targetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
 		}
 	}
