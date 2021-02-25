@@ -188,6 +188,7 @@ int main(int argc, char** argv)
 	targetView.save(savePath.c_str());
 	cout << "Result saved!" << endl;
     
+    /*
     for(int new_X = -120; new_X<120; new_X += 10)
     {
         for(int new_Y = -110; new_Y<=120; new_Y += 10)
@@ -234,7 +235,31 @@ int main(int argc, char** argv)
             targetView.save(savePath.c_str());
             
         }
-    }
+    }*/
   
+    FILE * html_file = fopen("synthetic_views.html", "w");
+    fprintf(html_file, "<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n<title>synthetic views</title>\n<script src=\"https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js\">\n</script>\n<script>\n");
+    for(int k=0; k<576; k++)
+    {
+        string jquery = "$(document).ready(function(){$(\"#button"+std::to_string(k)+"\").hover(function(){$(\"#"+std::to_string(k)+"\").css(\"display\",\"block\");},function(){$(\"#"+std::to_string(k)+"\").css(\"display\",\"none\");});});";
+        fprintf(html_file, jquery);
+    }
+    fprintf(html_file, "</script>\n</head>\n<body>\n<pre>\n");
+    for(int m = 0; m<24; m++)
+    {
+        for(int n =0; n < 24;n++)
+        {
+            fprintf(html_file, "<a id=\"button"+std::to_string(m*24+n)+"\" style=\"background-color:rgb(127,127,127);\">&nbsp;&nbsp;</a>");
+        }
+        fprintf(html_file, "\n");
+    }
+    fprintf(html_file, "</pre>\n");
+    for(int k = 0; k<576; k++)
+    {
+        fprintf(html_file, "<img id=\""+std::to_string(k)+"\" src=\""+std::to_string(k)+".bmp\" style=\"display:none;\"></img>\n");
+    }
+    fprintf(html_file, "</body>\n</html>\n");
+            
+
 	return 0;
 }
