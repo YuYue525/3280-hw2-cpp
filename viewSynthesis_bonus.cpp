@@ -229,10 +229,11 @@ int main(int argc, char** argv)
                 //! record the resampled pixel value
                 }
             }
-        }
             
-        string savePath = "views/" + std::to_string(24 * (new_X+120)/10 + (new_Y+110)/10) + ".bmp";
-        targetView.save(savePath.c_str());
+            string savePath = "views/" + std::to_string(24 * (new_X+120)/10 + (new_Y+110)/10) + ".bmp";
+            targetView.save(savePath.c_str());
+            
+        }
     }
   
 	return 0;
