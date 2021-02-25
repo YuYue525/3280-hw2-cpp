@@ -105,8 +105,8 @@ int main(int argc, char** argv)
             {
                 int x, y;
                 double a, b, X, Y;
-                X = Vx + (Vz*(70*c-17885))/1024.0/targetFocalLen;//the position of the intersection
-                Y = Vy + (Vz*(70*r-17885))/1024.0/targetFocalLen;
+                X = Vx + (Vz*(70*c-17885))/1024.0/(double)targetFocalLen;//the position of the intersection
+                Y = Vy + (Vz*(70*r-17885))/1024.0/(double)targetFocalLen;
                               
                 x = (int)(X + 120)/Baseline;
                 y = (int)(120 - Y)/Baseline;
@@ -116,14 +116,14 @@ int main(int argc, char** argv)
                 
                 int ci, ri;
                 double u, v, alpha, beta;
-                u = (double)(70*c-17885)/1024.0*100.0/targetFocalLen+17.5;// the position of the pixel
-                v = (double)(70*r-17885)/1024.0*100.0/targetFocalLen+17.5;
+                u = (double)(70*c-17885)/1024.0*100.0/(double)targetFocalLen+17.5;// the position of the pixel
+                v = (double)(70*r-17885)/1024.0*100.0/(double)targetFocalLen+17.5;
 
-                ci = (int)((double)(u - 35.0/1024.0))/((double)(35.0/512.0));
-                ri = (int)((double)(v - 35.0/1024.0))/((double)(35.0/512.0));
+                ci = (int)((double)(1024*u - 35.0))/(70.0);
+                ri = (int)((double)(1024*v - 35.0))/(70.0);
                 
-                alpha = (u - (ci*35.0/512.0+35.0/1024.0))/(double)(35.0/512.0);
-                beta = 1-(v - (ri*35.0/512.0+35.0/1024.0))/(double)(35.0/512.0);
+                alpha = (1024 * u - (70 * ci + 35)) / (70.0);
+                beta = 1-(1024 * v - (70 * ri + 35)) / (70.0);
                 
                 if(X<120 && X>=-120 && Y<=120 && Y>-120 && ci>=0 && ci<511 && ri>=0 && ri<511)
                 {
