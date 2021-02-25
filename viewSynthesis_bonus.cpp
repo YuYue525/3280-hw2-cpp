@@ -232,7 +232,7 @@ int main(int argc, char** argv)
             }
             
             string savePath = "views/" + std::to_string(24 * (new_X+120)/10 + (new_Y+110)/10) + ".bmp";
-            targetView.save(savePath.c_str());
+            newTargetView.save(savePath.c_str());
             
         }
     }*/
@@ -245,9 +245,9 @@ int main(int argc, char** argv)
         fprintf(html_file, "%s",jquery.c_str());
     }
     fprintf(html_file, "</script>\n</head>\n<body>\n<pre>\n");
-    for(int m = 0; m<24; m++)
+    for(int n = 23; n>=0; n--)
     {
-        for(int n =0; n < 24;n++)
+        for(int m =0; m < 24;m++)
         {
             string button = "<a id=\"button" + std::to_string(m * 24 + n) + "\" style=\"background-color:rgb(127,127,127);\">&nbsp;&nbsp;</a>";
             fprintf(html_file,"%s", button.c_str());
