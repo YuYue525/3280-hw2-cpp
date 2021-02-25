@@ -256,7 +256,7 @@ int main(int argc, char** argv)
     fprintf(html_file, "</pre>\n");
     for(int k = 0; k<576; k++)
     {
-        fprintf(html_file, "<img id=\""+std::to_string(k)+"\" src=\""+std::to_string(k)+".bmp\" style=\"display:none;\"></img>\n");
+        fprintf(html_file, "<img id=\""+std::to_string(k)+"\" src=\"views\\"+std::to_string(k)+".bmp\" style=\"display:none;\"></img>\n");
     }
     fprintf(html_file, "</body>\n</html>\n");
             
