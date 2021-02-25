@@ -204,11 +204,11 @@ int main(int argc, char** argv)
                     int x, y;
                     double a, b;
                         
-                    x = (int)(X + 120)/Baseline;
-                    y = (int)(120 - Y)/Baseline;
+                    x = (int)(new_X + 120)/Baseline;
+                    y = (int)(120 - new_Y)/Baseline;
 
-                    a = (X + 120 - (x * Baseline))/(double)Baseline;
-                    b = (120 - Y - (y * Baseline))/(double)Baseline;
+                    a = (new_X + 120 - (x * Baseline))/(double)Baseline;
+                    b = (120 - new_Y - (y * Baseline))/(double)Baseline;
               
                     unsigned char red1, green1, blue1;
                     unsigned char red2, green2, blue2;
@@ -223,9 +223,11 @@ int main(int argc, char** argv)
                     rayRGB.x = (double)((1-b) * ((1-a) * red1 + a * red2) + b * ((1-a) * red3 + a * red4));
                     rayRGB.y = (double)((1-b) * ((1-a) * green1 + a * green2) + b * ((1-a) * green3 + a * green4));
                     rayRGB.z = (double)((1-b) * ((1-a) * blue1 + a * blue2) + b * ((1-a) * blue3 + a * blue4));
-                }
+                    
+                    newTargetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
+                
                 //! record the resampled pixel value
-                newTargetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
+                }
             }
         }
             
