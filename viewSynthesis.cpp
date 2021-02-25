@@ -83,8 +83,8 @@ int main(int argc, char** argv)
                     x = (int)(X + 120)/Baseline;
                     y = (int)(120 - Y)/Baseline;
 
-                    a = (Vx + 120 - (x * Baseline))/(double)Baseline;
-                    b = (120 - Vy - (y * Baseline))/(double)Baseline;
+                    a = (X + 120 - (x * Baseline))/(double)Baseline;
+                    b = (120 - Y - (y * Baseline))/(double)Baseline;
       
                     unsigned char red1, green1, blue1;
                     unsigned char red2, green2, blue2;
@@ -111,8 +111,8 @@ int main(int argc, char** argv)
                 x = (int)(X + 120)/Baseline;
                 y = (int)(120 - Y)/Baseline;
 
-                a = (Vx + 120 - (x * Baseline))/(double)Baseline;// alpha and beta of the position of the intersection
-                b = (120 - Vy - (y * Baseline))/(double)Baseline;
+                a = (X + 120 - (x * Baseline))/(double)Baseline;// alpha and beta of the position of the intersection
+                b = (120 - Y - (y * Baseline))/(double)Baseline;
                 
                 int ci, ri;
                 double u, v, alpha, beta;
