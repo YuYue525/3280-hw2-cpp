@@ -522,7 +522,6 @@ int main(int argc, char** argv)
     }
             
     printf("4. do you want to generate a html with rotating views display? [y/n]\nIf yes, please create an empty directory named 'rotatingViews' under the current directory\n");
-    char input;
     scanf("%c", &input);
     getchar();
     if(input == 'y')
@@ -531,7 +530,7 @@ int main(int argc, char** argv)
         {
             for(int psi = 100; psi>80;psi--)
             {
-                Bitmap newTargetView(Resolution_Col, Resolution_Row);
+                Bitmap rotTargetView(Resolution_Col, Resolution_Row);
                 
                 for (int r = 0; r < Resolution_Row; r++)
                 {
@@ -628,12 +627,12 @@ int main(int argc, char** argv)
                             rayRGB.y = (double)((1-b) * ((1-a) * green1 + a * green2) + b * ((1-a) * green3 + a * green4));
                             rayRGB.z = (double)((1-b) * ((1-a) * blue1 + a * blue2) + b * ((1-a) * blue3 + a * blue4));
                         }
-                        targetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
+                        rotTargetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
                     }
                 }
                 
                 string savePath = "rotatingViews/" + std::to_string(20 * (theta-80) + (100-psi)) + ".bmp";
-                newTargetView.save(savePath.c_str());
+                rotTargetView.save(savePath.c_str());
                 
             }
         }
@@ -658,7 +657,7 @@ int main(int argc, char** argv)
         fprintf(html_file, "</pre>\n");
         for(int k = 0; k<400; k++)
         {
-            string img = "<img id=\"" + std::to_string(k) + "\" src=\"views\\" + std::to_string(k) + ".bmp\" style=\"display:none;\"></img>\n";
+            string img = "<img id=\"" + std::to_string(k) + "\" src=\"rotatingViews\\" + std::to_string(k) + ".bmp\" style=\"display:none;\"></img>\n";
             fprintf(html_file, "%s", img.c_str());
         }
         fprintf(html_file, "</body>\n</html>\n");
