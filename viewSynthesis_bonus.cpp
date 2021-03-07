@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <math>
+#include <math.h>
 
 using namespace std;
 
@@ -16,7 +16,7 @@ using namespace std;
 #define Resolution_Col 512
 #define View_Grid_Row 9
 #define View_Grid_Col 9
-#define PI 3.14159265
+#define PI acos(-1)
 
 struct Point3d
 {
@@ -430,18 +430,18 @@ int main(int argc, char** argv)
                 int x, y;
                 double a, b, X, Y;
                 //the position of the intersection
-                double a, b, c;
-                a = (2*Image_Width*c-Image_Width*(Resolution_Col-1))/(double)(2*Resolution_Col);
-                b = (2*Image_Height*r-Image_Height*(Resolution_Row-1))/(double)(2*Resolution_Row);
-                c = - targetFocalLen;
+                double a_, b_, c_;
+                a_ = (2*Image_Width*c-Image_Width*(Resolution_Col-1))/(double)(2*Resolution_Col);
+                b_ = (2*Image_Height*r-Image_Height*(Resolution_Row-1))/(double)(2*Resolution_Row);
+                c_ = - targetFocalLen;
                 
-                double a_,b_,c_;
-                a_ = sin(psi*PI/180)*a - cos(psi*PI/180)*cos(theta*PI/180)*b - sin(theta*PI/180)*cos(psi*PI/180)*c;
-                b_ = sin(theta*PI/180)*b - cos(theta*PI/180)*c;
-                c_ = cos(theta*PI/180)*a + sin(psi*PI/180)*b +sin(psi*PI/180)*sin(theta*PI/180)*c;
+                double a__,b__,c__;
+                a__ = sin((double)psi*PI/180.0)*a_ - cos((double)psi*PI/180.0)*cos((double)theta*PI/180.0)*b_ - sin((double)theta*PI/180.0)*cos((double)psi*PI/180.0)*c_;
+                b__ = sin((double)theta*PI/180.0)*b_ - cos((double)theta*PI/180.0)*c_;
+                c__ = cos((double)theta*PI/180.0)*a_ + sin((double)psi*PI/180.0)*cos((double)theta*PI/180.0)*b_ +sin((double)psi*PI/180.0)*sin((double)theta*PI/180.0)*c_;
                 
-                X = Vx - (Vz*a_)/c_;
-                Y = Vy - (Vz*b_)/c_;
+                X = Vx - (Vz*a__)/c__;
+                Y = Vy - (Vz*b__)/c__;
                               
                 x = (int)(X + (Baseline*(View_Grid_Col-1)/2.0))/Baseline;
                 y = (int)((Baseline*(View_Grid_Row-1)/2.0) - Y)/Baseline;
@@ -452,8 +452,8 @@ int main(int argc, char** argv)
                 
                 int ci, ri;
                 double u, v, alpha, beta;
-                u = (double)(-a_*Focal_Length/c_) + Image_Width/2.0;// the position of the pixel
-                v = (double)(-b_*Focal_Length/c_) + Image_Height/2.0;
+                u = (double)(-a__*Focal_Length/c__) + Image_Width/2.0;// the position of the pixel
+                v = (double)(-b__*Focal_Length/c__) + Image_Height/2.0;
 
                 ci = (int)((double)((2*Resolution_Col) * u - Image_Width))/(double)(2*Image_Width);
                 ri = (int)((double)((2*Resolution_Row) * v - Image_Height))/(double)(2*Image_Height);
