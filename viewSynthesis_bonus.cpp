@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <math>
+
 using namespace std;
 
 #define Baseline 30.0
@@ -14,6 +16,7 @@ using namespace std;
 #define Resolution_Col 512
 #define View_Grid_Row 9
 #define View_Grid_Col 9
+#define PI 3.14159265
 
 struct Point3d
 {
@@ -189,7 +192,7 @@ int main(int argc, char** argv)
 	targetView.save(savePath.c_str());
 	cout << "Result saved!" << endl;
     
-    printf("1. do you want to generate a html with 3D display? [y/n]\n");
+    printf("1. do you want to generate a html with 3D display? [y/n]\nIf yes, please create an empty directory named 'views' under the current directory\n");
     char input;
     scanf("%c", &input);
     getchar();
@@ -277,6 +280,7 @@ int main(int argc, char** argv)
         printf("please enter the parameter as \n<viewpoint_coord> <focal_length> <baseline> <original_focal_length> <img_width> <img_height>\n");
         int Vx, Vy, Vz, targetFocalLen, baseline, focal_length, image_width, image_height;
         scanf("%d %d %d %d %d %d %d %d",&Vx, &Vy, &Vz, &targetFocalLen, &baseline, &focal_length, &image_width, &image_height);
+        getchar();
         Bitmap targetView(Resolution_Col, Resolution_Row);
         for (int r = 0; r < Resolution_Row; r++)
         {
@@ -405,7 +409,116 @@ int main(int argc, char** argv)
         string savePath = "newParameterView.bmp";
         targetView.save(savePath.c_str());
         cout << "Result saved!" << endl;
+    }
+    
+    printf("3. do you want to generate views with polar angle(theta) and azimuth angle(psi)? [y/n]\n");
+    scanf("%c", &input);
+    getchar();
+    if(input == 'y')
+    {
+        printf("please enter the viewpoint, focal length, polar angle(theta) and azimuth angle(psi) as \n<viewpoint> <focal_length> <theta(0,180)> <psi(0,180)>\n");
+        int Vx, Vy, Vz, targetFocalLen, theta, psi;
+        scanf("%d %d %d %d %d %d", &Vx, &Vy, &Vz, &targetFocalLen, &theta, &psi);
+        getchar();
         
+        Bitmap targetView(Resolution_Col, Resolution_Row);
+        for (int r = 0; r < Resolution_Row; r++)
+        {
+            for (int c = 0; c < Resolution_Col; c++)
+            {
+                Point3d rayRGB(0, 0, 0);
+                int x, y;
+                double a, b, X, Y;
+                //the position of the intersection
+                double a, b, c;
+                a = (2*Image_Width*c-Image_Width*(Resolution_Col-1))/(double)(2*Resolution_Col);
+                b = (2*Image_Height*r-Image_Height*(Resolution_Row-1))/(double)(2*Resolution_Row);
+                c = - targetFocalLen;
+                
+                double a_,b_,c_;
+                a_ = sin(psi*PI/180)*a - cos(psi*PI/180)*cos(theta*PI/180)*b - sin(theta*PI/180)*cos(psi*PI/180)*c;
+                b_ = sin(theta*PI/180)*b - cos(theta*PI/180)*c;
+                c_ = cos(theta*PI/180)*a + sin(psi*PI/180)*b +sin(psi*PI/180)*sin(theta*PI/180)*c;
+                
+                X = Vx - (Vz*a_)/c_;
+                Y = Vy - (Vz*b_)/c_;
+                              
+                x = (int)(X + (Baseline*(View_Grid_Col-1)/2.0))/Baseline;
+                y = (int)((Baseline*(View_Grid_Row-1)/2.0) - Y)/Baseline;
+
+                // alpha and beta of the position of the intersection
+                a = (X + (Baseline*(View_Grid_Col-1)/2.0) - (x * Baseline))/(double)Baseline;
+                b = ((Baseline*(View_Grid_Row-1)/2.0) - Y - (y * Baseline))/(double)Baseline;
+                
+                int ci, ri;
+                double u, v, alpha, beta;
+                u = (double)(-a_*Focal_Length/c_) + Image_Width/2.0;// the position of the pixel
+                v = (double)(-b_*Focal_Length/c_) + Image_Height/2.0;
+
+                ci = (int)((double)((2*Resolution_Col) * u - Image_Width))/(double)(2*Image_Width);
+                ri = (int)((double)((2*Resolution_Row) * v - Image_Height))/(double)(2*Image_Height);
+                
+                alpha = ((2*Resolution_Col) * u - ((2*Image_Width) * ci + Image_Width)) / (double)(2*Image_Width);
+                beta = 1 - ((2*Resolution_Row) * v - (2*Image_Height * ri + Image_Height)) / (double)(2*Image_Height);
+                
+                if(X < 120 && X>=-120 && Y <=120 && Y > -120 && ci>=0 && ci<511 && ri>=0 && ri<511)
+                {
+                    unsigned char red1, green1, blue1;// four rays of neighbour viewpoints
+                    unsigned char red2, green2, blue2;
+                    unsigned char red3, green3, blue3;
+                    unsigned char red4, green4, blue4;
+                    
+                    for(int i = 0; i<2;i++)
+                    {
+                        for(int j = 0; j<2; j++)
+                        {
+                            unsigned char r1, g1, b1;
+                            unsigned char r2, g2, b2;
+                            unsigned char r3, g3, b3;
+                            unsigned char r4, g4, b4;
+                            
+                            viewImageList[View_Grid_Col * (y+i) + (x+j)].getColor(ci, ri+1, r1, g1, b1);
+                            viewImageList[View_Grid_Col * (y+i) + (x+j)].getColor(ci+1, ri+1, r2, g2, b2);
+                            viewImageList[View_Grid_Col * (y+i) + (x+j)].getColor(ci, ri, r3, g3, b3);
+                            viewImageList[View_Grid_Col * (y+i) + (x+j)].getColor(ci+1, ri, r4, g4, b4);
+                            
+                            if(i == 0 && j ==0)
+                            {
+                                red1 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green1 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue1 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
+                            }
+                            else if(i == 0 && j == 1)
+                            {
+                                red2 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green2 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue2 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
+                            }
+                            else if(i ==1 && j == 0)
+                            {
+                                red3 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green3 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue3 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
+                            }
+                            else
+                            {
+                                red4 = (double)((1-beta) * ((1-alpha) * r1 + alpha * r2) + beta * ((1-alpha) * r3 + alpha * r4));
+                                green4 = (double)((1-beta) * ((1-alpha) * g1 + alpha * g2) + beta * ((1-alpha) * g3 + alpha * g4));
+                                blue4 = (double)((1-beta) * ((1-alpha) * b1 + alpha * b2) + beta * ((1-alpha) * b3 + alpha * b4));
+                            }
+                        }
+                    }
+                    
+                    rayRGB.x = (double)((1-b) * ((1-a) * red1 + a * red2) + b * ((1-a) * red3 + a * red4));
+                    rayRGB.y = (double)((1-b) * ((1-a) * green1 + a * green2) + b * ((1-a) * green3 + a * green4));
+                    rayRGB.z = (double)((1-b) * ((1-a) * blue1 + a * blue2) + b * ((1-a) * blue3 + a * blue4));
+                }
+                targetView.setColor(c, r, (unsigned char) rayRGB.x, (unsigned char) rayRGB.y, (unsigned char) rayRGB.z);
+            }
+        }
+        string savePath = "newAngleView.bmp";
+        targetView.save(savePath.c_str());
+        cout << "Result saved!" << endl;
     }
             
 
